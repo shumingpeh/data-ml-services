@@ -1,0 +1,14 @@
+hip-data-ml-utils==1.4.5
+databricks-vectorsearch==0.56
+joblib==1.2.0
+loguru==0.7.0
+wheel==0.38.0
+pendulum==3.0.0
+pillow>=10.3.0
+polling==0.3.2
+pydantic==2.11.3
+pydantic-settings==2.9.1
+python-dotenv==1.0.0
+setuptools>=70.0.0
+tenacity==9.0.0
+zipp>=3.19.1

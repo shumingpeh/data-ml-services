@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "sm_vector_store"
+version = "0.1.0"
+description = "Common Python utilities for ML services; Vector store"
+authors = ["Shuming Peh <shuming.peh@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.14"
+sm-data-ml-utils = "^1.4.7"
+databricks-vectorsearch = "0.56"
+joblib = "1.2.0"
+loguru = "0.7.0"
+pendulum = "3.0.0"
+polling = "0.3.2"
+pydantic = "^2.11.3"
+pydantic-settings = "^2.9.1"
+python-dotenv = "1.0.0"
+tenacity = "9.0.0"
+zipp = "^3.21.0"
+gevent = "^24.11.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
