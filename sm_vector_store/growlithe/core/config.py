@@ -13,7 +13,7 @@ class Settings(BaseSettings):
         default=None,
         env="DATABRICKS_HOST",
     )
-    DATABRICKS_PAT_TOKEN: Optional[str] = Field(
+    DATABRICKS_TOKEN: Optional[str] = Field(
         default=None,
         env="DATABRICKS_TOKEN",
     )

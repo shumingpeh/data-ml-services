@@ -27,7 +27,7 @@ class _GrowlitheRegistry:
         self.settings_config = settings_config
         self.vsc = VectorSearchClient(
             workspace_url=self.settings_config.DATABRICKS_CLUSTER_HOST,
-            personal_access_token=self.settings_config.DATABRICKS_PAT_TOKEN,
+            personal_access_token=self.settings_config.DATABRICKS_TOKEN,
             disable_notice=True,
         )
         self.databricks_client = DatabricksSQLClient()

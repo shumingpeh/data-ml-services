@@ -35,7 +35,7 @@ class _GrowlitheVectorStore:
         self.vs_endpoint_name = vs_endpoint_name
         self.vsc = VectorSearchClient(
             workspace_url=self.settings_config.DATABRICKS_CLUSTER_HOST,
-            personal_access_token=self.settings_config.DATABRICKS_PAT_TOKEN,
+            personal_access_token=self.settings_config.DATABRICKS_TOKEN,
             disable_notice=True,
         )
         # test databricks connection
