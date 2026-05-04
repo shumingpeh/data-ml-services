@@ -1,10 +1,10 @@
 from typing import List
 
-from hip_vector_store.growlithe.core import config
-from hip_vector_store.growlithe.registry._growlithe_registry_client import (
+from sm_vector_store.growlithe.core import config
+from sm_vector_store.growlithe.registry._growlithe_registry_client import (
     _GrowlitheRegistry,
 )
-from hip_vector_store.growlithe.vector_store._growlithe_vector_store_client import (
+from sm_vector_store.growlithe.vector_store._growlithe_vector_store_client import (
     _GrowlitheVectorStore,
 )
 from loguru import logger

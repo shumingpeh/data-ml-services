@@ -2,7 +2,7 @@ from typing import List
 
 from databricks.vector_search.client import VectorSearchClient
 from sm_data_ml_utils.databricks_client.client import DatabricksSQLClient
-from hip_vector_store.growlithe.core import config
+from sm_vector_store.growlithe.core import config
 from loguru import logger
 
 

@@ -1,6 +1,6 @@
 import polling
 from databricks.vector_search.client import VectorSearchClient
-from hip_vector_store.growlithe.core import config
+from sm_vector_store.growlithe.core import config
 from loguru import logger
 from tenacity import retry
 from tenacity import stop_after_attempt
