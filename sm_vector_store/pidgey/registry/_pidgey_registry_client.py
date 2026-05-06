@@ -1,6 +1,7 @@
 from typing import List
 
 from databricks.vector_search.client import VectorSearchClient
+from databricks.vector_search.reranker import DatabricksReranker
 from sm_data_ml_utils.databricks_client.client import DatabricksSQLClient
 from sm_vector_store.pidgey.core import config
 from loguru import logger
@@ -58,6 +59,7 @@ class _PidgeyRegistry:
         vector_index_name: str,
         query_text: str,
         columns: List,
+        columns_rerank: List,
         num_results: int = 1,
         score_threshold: float = 0.8,
         query_type: str = "HYBRID",
@@ -99,6 +101,7 @@ class _PidgeyRegistry:
             score_threshold=score_threshold,
             num_results=num_results,
             disable_notice=True,
+            reranker=DatabricksReranker(columns_to_rerank=columns_rerank)
         )
 
         return results.get("result", {}).get("data_array", [])
