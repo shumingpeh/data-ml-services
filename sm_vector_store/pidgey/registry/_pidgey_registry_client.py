@@ -1,12 +1,12 @@
 from typing import List
 
-from databricks.vector_search.client import VectorSearchClient
+from databricks.vector_search.client import VectorSearchIndex
 from sm_data_ml_utils.databricks_client.client import DatabricksSQLClient
-from sm_vector_store.growlithe.core import config
+from sm_vector_store.pidgey.core import config
 from loguru import logger
 
 
-class _GrowlitheRegistry:
+class _PidgeyRegistry:
     """
     The registry client is mainly a wrapper for the databricks vector search
     python library. Here, we mainly deal with the retrieval
@@ -16,7 +16,7 @@ class _GrowlitheRegistry:
 
     def __init__(self, settings_config: config.Settings):
         """
-        Initialise growlithe registry client
+        Initialise pidgey registry client
 
         Parameters
         ----------

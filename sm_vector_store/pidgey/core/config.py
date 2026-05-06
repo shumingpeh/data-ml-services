@@ -30,7 +30,7 @@ class Settings(BaseSettings):
         env="UNITY_CATALOG",
     )
     VECTOR_SEARCH_PREFIX: str
-    VECTOR_SEARCH_PREFIX = "growlithe"
+    VECTOR_SEARCH_PREFIX = "pidgey"
     VS_ENDPOINT_TYPE: str
     VS_ENDPOINT_TYPE = "STANDARD"
 

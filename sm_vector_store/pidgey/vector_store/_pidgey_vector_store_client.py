@@ -1,13 +1,13 @@
 import polling
 from databricks.vector_search.client import VectorSearchClient
-from sm_vector_store.growlithe.core import config
+from sm_vector_store.pidgey.core import config
 from loguru import logger
 from tenacity import retry
 from tenacity import stop_after_attempt
 from tenacity import wait_fixed
 
 
-class _GrowlitheVectorStore:
+class _PidgeyVectorStore:
     """
     The vector store client is used to manage vector search endpoints
     """
@@ -19,7 +19,7 @@ class _GrowlitheVectorStore:
         vs_index_name: str = None,
     ):
         """
-        Initialise growlithe vector store client
+        Initialise pidgey vector store client
 
         Parameters
         ----------
