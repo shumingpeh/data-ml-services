@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.12,<3.14"
-sm-data-ml-utils = "^1.0.7"
+sm-data-ml-utils = "^1.0.8"
 databricks-vectorsearch = "0.67"
 joblib = "1.3.2"
 loguru = "0.7.3"
