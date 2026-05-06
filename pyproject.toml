@@ -11,10 +11,10 @@ python = ">=3.12,<3.14"
 sm-data-ml-utils = "^1.0.7"
 databricks-vectorsearch = "0.67"
 joblib = "1.3.2"
-loguru = "0.7.0"
-pendulum = "3.0.0"
+loguru = "0.7.3"
+pendulum = "3.2.0"
 polling = "0.3.2"
-python-dotenv = "1.0.0"
+python-dotenv = "1.2.2"
 tenacity = "9.0.0"
 
 

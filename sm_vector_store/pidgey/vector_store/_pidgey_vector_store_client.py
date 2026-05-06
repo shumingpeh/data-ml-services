@@ -201,7 +201,7 @@ class _PidgeyVectorStore:
         embedding_source_column: str,
         embedding_model_endpoint_name: str,
         polling_step: int = 20,
-        polling_max_tries: int = 90,
+        polling_max_tries: int = 100,
     ) -> int:
         """
         function to create vector search index (delta sync)
@@ -251,7 +251,7 @@ class _PidgeyVectorStore:
             # poll to check if the index is up and running
             # idx = vsc.get_index(vs_endpoint_name, index_name).describe()
             polling_response = polling.poll(
-                lambda: "ONLINE"
+                lambda: "ONLINE_NO_PENDING_UPDATE"
                 in self._get_endpoint_state_status(
                     endpoint=self.vsc.get_index(
                         vs_endpoint_name, vs_index_name
