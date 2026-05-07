@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sm_vector_store"
-version = "0.1.0"
+version = "0.1.1"
 description = "Common Python utilities for ML services; Vector store"
 authors = ["Shuming Peh <shuming.peh@gmail.com>"]
 license = "MIT"
