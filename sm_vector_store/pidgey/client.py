@@ -1,16 +1,16 @@
 from typing import List
 
-from hip_vector_store.growlithe.core import config
-from hip_vector_store.growlithe.registry._growlithe_registry_client import (
-    _GrowlitheRegistry,
+from sm_vector_store.pidgey.core import config
+from sm_vector_store.pidgey.registry._pidgey_registry_client import (
+    _PidgeyRegistry,
 )
-from hip_vector_store.growlithe.vector_store._growlithe_vector_store_client import (
-    _GrowlitheVectorStore,
+from sm_vector_store.pidgey.vector_store._pidgey_vector_store_client import (
+    _PidgeyVectorStore,
 )
 from loguru import logger
 
 
-class GrowlitheClient:
+class PidgeyClient:
     """
     The client is used to manage the databricks vector store, which currently includes
     creation of endpoint and index, and (fast) retrieval of context.
@@ -30,7 +30,7 @@ class GrowlitheClient:
         vs_index_name: str = None,
     ):
         """
-        Initialise growlithe client
+        Initialise pidgey client
 
         Parameters
         ----------
@@ -44,12 +44,12 @@ class GrowlitheClient:
 
         self.vector_store_client = None
         if self.settings_config.DATABRICKS_CLUSTER_HOST not in ("", None, "test"):
-            self.vector_store_client = _GrowlitheVectorStore(
+            self.vector_store_client = _PidgeyVectorStore(
                 settings_config=self.settings_config,
             )
         self.registry = None
         if self.settings_config.DATABRICKS_CLUSTER_HOST not in ("", None, "test"):
-            self.registry = _GrowlitheRegistry(settings_config=self.settings_config)
+            self.registry = _PidgeyRegistry(settings_config=self.settings_config)
 
     def change_source_table_format(
         self,
@@ -172,6 +172,7 @@ class GrowlitheClient:
         vector_index_name: str,
         query_text: str,
         columns: List,
+        columns_rerank: List,
         num_results: int = 1,
         score_threshold: float = 0.8,
         query_type: str = "HYBRID",
@@ -208,6 +209,7 @@ class GrowlitheClient:
             vector_index_name=vector_index_name,
             query_text=query_text,
             columns=columns,
+            columns_rerank=columns_rerank,
             num_results=num_results,
             score_threshold=score_threshold,
             query_type=query_type,

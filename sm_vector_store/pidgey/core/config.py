@@ -13,7 +13,7 @@ class Settings(BaseSettings):
         default=None,
         env="DATABRICKS_HOST",
     )
-    DATABRICKS_PAT_TOKEN: Optional[str] = Field(
+    DATABRICKS_TOKEN: Optional[str] = Field(
         default=None,
         env="DATABRICKS_TOKEN",
     )
@@ -30,7 +30,7 @@ class Settings(BaseSettings):
         env="UNITY_CATALOG",
     )
     VECTOR_SEARCH_PREFIX: str
-    VECTOR_SEARCH_PREFIX = "growlithe"
+    VECTOR_SEARCH_PREFIX = "pidgey"
     VS_ENDPOINT_TYPE: str
     VS_ENDPOINT_TYPE = "STANDARD"
 

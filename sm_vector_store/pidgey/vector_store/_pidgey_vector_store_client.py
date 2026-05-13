@@ -1,13 +1,13 @@
 import polling
 from databricks.vector_search.client import VectorSearchClient
-from hip_vector_store.growlithe.core import config
+from sm_vector_store.pidgey.core import config
 from loguru import logger
 from tenacity import retry
 from tenacity import stop_after_attempt
 from tenacity import wait_fixed
 
 
-class _GrowlitheVectorStore:
+class _PidgeyVectorStore:
     """
     The vector store client is used to manage vector search endpoints
     """
@@ -19,7 +19,7 @@ class _GrowlitheVectorStore:
         vs_index_name: str = None,
     ):
         """
-        Initialise growlithe vector store client
+        Initialise pidgey vector store client
 
         Parameters
         ----------
@@ -35,7 +35,7 @@ class _GrowlitheVectorStore:
         self.vs_endpoint_name = vs_endpoint_name
         self.vsc = VectorSearchClient(
             workspace_url=self.settings_config.DATABRICKS_CLUSTER_HOST,
-            personal_access_token=self.settings_config.DATABRICKS_PAT_TOKEN,
+            personal_access_token=self.settings_config.DATABRICKS_TOKEN,
             disable_notice=True,
         )
         # test databricks connection
@@ -201,7 +201,7 @@ class _GrowlitheVectorStore:
         embedding_source_column: str,
         embedding_model_endpoint_name: str,
         polling_step: int = 20,
-        polling_max_tries: int = 90,
+        polling_max_tries: int = 100,
     ) -> int:
         """
         function to create vector search index (delta sync)
@@ -251,7 +251,7 @@ class _GrowlitheVectorStore:
             # poll to check if the index is up and running
             # idx = vsc.get_index(vs_endpoint_name, index_name).describe()
             polling_response = polling.poll(
-                lambda: "ONLINE"
+                lambda: "ONLINE_NO_PENDING_UPDATE"
                 in self._get_endpoint_state_status(
                     endpoint=self.vsc.get_index(
                         vs_endpoint_name, vs_index_name
