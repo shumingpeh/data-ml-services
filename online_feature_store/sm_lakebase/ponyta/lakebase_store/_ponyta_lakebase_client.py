@@ -1,15 +1,19 @@
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 from databricks.sdk import WorkspaceClient
-from databricks.sdk.service.postgres import Project
-from databricks.sdk.service.postgres import ProjectSpec
 from databricks.sdk.service.postgres import Branch
 from databricks.sdk.service.postgres import BranchSpec
-from databricks.sdk.service.postgres import FieldMask
-from databricks.sdk.service.postgres import EndpointType
+from databricks.sdk.service.postgres import Duration
 from databricks.sdk.service.postgres import Endpoint
 from databricks.sdk.service.postgres import EndpointSpec
-from databricks.sdk.service.postgres import Duration
-from sm_lakebase.ponyta.core import config
+from databricks.sdk.service.postgres import EndpointType
+from databricks.sdk.service.postgres import FieldMask
+from databricks.sdk.service.postgres import Project
+from databricks.sdk.service.postgres import ProjectSpec
 from loguru import logger
+from sm_lakebase.ponyta.core import config
 
 
 class _PonytaLakebaseStore:
@@ -20,7 +24,7 @@ class _PonytaLakebaseStore:
     def __init__(
         self,
         settings_config: config.Settings,
-        pg_autoscaling_name: str = None,
+        pg_project_name: str = None,
         pg_branch_name: str = None,
     ):
         """
@@ -78,9 +82,8 @@ class _PonytaLakebaseStore:
             success returns a non exit functon value
         """
         try:
-            if projects+pg_project_name in [
-                project.name
-                for project in self.lbc.postgres.list_projects()
+            if "projects/" + pg_project_name in [
+                project.name for project in self.lbc.postgres.list_projects()
             ]:
                 return 0
             return 1
@@ -109,11 +112,8 @@ class _PonytaLakebaseStore:
             operation = self.lbc.postgres.create_project(
                 project_id=pg_project_name,
                 project=Project(
-                    spec=ProjectSpec(
-                        display_name=pg_project_name,
-                        pg_version=17
-                    )
-                )
+                    spec=ProjectSpec(display_name=pg_project_name, pg_version=17)
+                ),
             )
 
             result = operation.wait()
@@ -125,8 +125,9 @@ class _PonytaLakebaseStore:
         logger.info(f"lakebase project: {pg_project_name} alr exists")
         return 0
 
-
-    def _check_lakebase_branch_exists(self, pg_project_name: str, pg_branch_name: str) -> int:
+    def _check_lakebase_branch_exists(
+        self, pg_project_name: str, pg_branch_name: str
+    ) -> int:
         """
         function to check if name of lakebase branch exists
 
@@ -144,8 +145,10 @@ class _PonytaLakebaseStore:
         """
         try:
             if pg_branch_name in [
-                branch.name.split('/')[-1]
-                for branch in self.lbc.postgres.list_branches(parent="projects/"+pg_project_name)
+                branch.name.split("/")[-1]
+                for branch in self.lbc.postgres.list_branches(
+                    parent="projects/" + pg_project_name
+                )
             ]:
                 return 0
             return 1
@@ -153,7 +156,12 @@ class _PonytaLakebaseStore:
             logger.error(e)
             return 1
 
-    def _create_lb_branch(self, pg_project_name: str, pg_branch_name: str, pg_source_branch: str = "master") -> int:
+    def _create_lb_branch(
+        self,
+        pg_project_name: str,
+        pg_branch_name: str,
+        pg_source_branch: str = "master",
+    ) -> int:
         """
         function to create branch in lakebase project
 
@@ -179,7 +187,7 @@ class _PonytaLakebaseStore:
                 parent=f"projects/{pg_project_name}",
                 branch=Branch(
                     spec=BranchSpec(
-                        source_branch=f"projects/{pg_project_name}/branches/{pg_source_branch}",
+                        source_branch=f"projects/{pg_project_name}/branches/{pg_source_branch}",  # noqa: E501
                         no_expiry=True,
                     )
                 ),
@@ -188,14 +196,14 @@ class _PonytaLakebaseStore:
 
             result = operation.wait()
 
-            if result.name.split('/')[-1] == pg_branch_name:
+            if result.name.split("/")[-1] == pg_branch_name:
                 logger.info(f"finish lakebase branch: {pg_branch_name}")
                 return 0
 
         logger.info(f"lakebase branch: {pg_branch_name} alr exists")
         return 0
 
-    def partial_function_setting(compute_settings: Dict) -> Tuple[List, Dict]:
+    def partial_function_setting(self, compute_settings: Dict) -> Tuple[List, Dict]:
         """
         function to simplify settings
 
@@ -212,16 +220,14 @@ class _PonytaLakebaseStore:
             dictionary that contains the partial function to update
         """
 
-        spec_kwargs = {
-            "endpoint_type": EndpointType.ENDPOINT_TYPE_READ_WRITE
-        }
+        spec_kwargs = {"endpoint_type": EndpointType.ENDPOINT_TYPE_READ_WRITE}
 
         field_mask_list = []
 
         if "min_cu" in config:
             spec_kwargs["autoscaling_limit_min_cu"] = config["min_cu"]
             field_mask_list.append("spec.autoscaling_limit_min_cu")
-            
+
         if "max_cu" in config:
             spec_kwargs["autoscaling_limit_max_cu"] = config["max_cu"]
             field_mask_list.append("spec.autoscaling_limit_max_cu")
@@ -233,14 +239,16 @@ class _PonytaLakebaseStore:
             return field_mask_list, spec_kwargs
 
         if "timeout_seconds" in config:
-            spec_kwargs["suspend_timeout_duration"] = Duration(seconds=config["timeout_seconds"])
+            spec_kwargs["suspend_timeout_duration"] = Duration(
+                seconds=config["timeout_seconds"]
+            )
             field_mask_list.append("spec.suspension")
 
         return field_mask_list, spec_kwargs
 
-
-
-    def _update_lb_branch_compute_settings(self, pg_project_name: str, pg_branch_name: str, compute_settings: Dict) -> int:
+    def _update_lb_branch_compute_settings(
+        self, pg_project_name: str, pg_branch_name: str, compute_settings: Dict
+    ) -> int:
         """
         function to create branch in lakebase project
 
@@ -256,15 +264,19 @@ class _PonytaLakebaseStore:
         Returns
         ----------
         int
-            success returns a non exit value
+            success returns a non exit function value
 
         """
 
-        project_name = f"projects/{pg_project_name}/branches/{pg_branch_name}/endpoints/primary"
-        field_mask_list, spec_kwargs = partial_function_setting(compute_settings=compute_settings)
+        project_name = (
+            f"projects/{pg_project_name}/branches/{pg_branch_name}/endpoints/primary"
+        )
+        field_mask_list, spec_kwargs = self.partial_function_setting(
+            compute_settings=compute_settings
+        )
 
         endpoint = Endpoint(
-            name= project_name,
+            name=project_name,
             spec=EndpointSpec(**spec_kwargs),
         )
 
