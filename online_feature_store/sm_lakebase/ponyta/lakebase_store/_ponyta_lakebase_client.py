@@ -256,7 +256,7 @@ class _PonytaLakebaseStore:
         Returns
         ----------
         int
-            success returns a non exit functon value
+            success returns a non exit value
 
         """
 
