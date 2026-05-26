@@ -160,7 +160,7 @@ class _PonytaLakebaseStore:
         self,
         pg_project_name: str,
         pg_branch_name: str,
-        pg_source_branch: str = "master",
+        pg_source_branch: str = "production",
     ) -> int:
         """
         function to create branch in lakebase project
@@ -280,8 +280,16 @@ class _PonytaLakebaseStore:
             spec=EndpointSpec(**spec_kwargs),
         )
 
-        return self.lbc.postgres.update_endpoint(
-            name=project_name,
-            endpoint=endpoint,
-            update_mask=FieldMask(field_mask=field_mask_list),
-        ).wait()
+        try:
+            status_result = self.lbc.postgres.update_endpoint(
+                name=project_name,
+                endpoint=endpoint,
+                update_mask=FieldMask(field_mask=field_mask_list),
+            ).wait()
+
+            if status_result.update_time.seconds:
+                return 0
+            return 1
+        except Exception as e:
+            logger.error(e)
+            return 1
