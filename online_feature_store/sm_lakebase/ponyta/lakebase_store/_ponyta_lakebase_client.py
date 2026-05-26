@@ -224,23 +224,23 @@ class _PonytaLakebaseStore:
 
         field_mask_list = []
 
-        if "min_cu" in config:
-            spec_kwargs["autoscaling_limit_min_cu"] = config["min_cu"]
+        if "min_cu" in compute_settings:
+            spec_kwargs["autoscaling_limit_min_cu"] = compute_settings["min_cu"]
             field_mask_list.append("spec.autoscaling_limit_min_cu")
 
-        if "max_cu" in config:
-            spec_kwargs["autoscaling_limit_max_cu"] = config["max_cu"]
+        if "max_cu" in compute_settings:
+            spec_kwargs["autoscaling_limit_max_cu"] = compute_settings["max_cu"]
             field_mask_list.append("spec.autoscaling_limit_max_cu")
 
-        if "no_suspension" in config:
-            spec_kwargs["no_suspension"] = config["no_suspension"]
+        if "no_suspension" in compute_settings:
+            spec_kwargs["no_suspension"] = compute_settings["no_suspension"]
             field_mask_list.append("spec.suspension")
 
             return field_mask_list, spec_kwargs
 
-        if "timeout_seconds" in config:
+        if "timeout_seconds" in compute_settings:
             spec_kwargs["suspend_timeout_duration"] = Duration(
-                seconds=config["timeout_seconds"]
+                seconds=compute_settings["timeout_seconds"]
             )
             field_mask_list.append("spec.suspension")
 
