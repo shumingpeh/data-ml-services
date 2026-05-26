@@ -118,7 +118,7 @@ class _PonytaLakebaseStore:
 
             result = operation.wait()
 
-            if result.name == "projects" + pg_project_name:
+            if result.name == "projects/" + pg_project_name:
                 logger.info(f"finish lakebase project: {pg_project_name}")
                 return 0
 
