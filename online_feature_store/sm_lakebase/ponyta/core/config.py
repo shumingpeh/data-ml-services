@@ -21,10 +21,6 @@ class Settings(BaseSettings):
         default=None,
         env="DATABRICKS_SQL_PATH",
     )
-    PIPELINE_TYPE: Optional[str] = Field(
-        default="TRIGGERED",
-        env="PIPELINE_TYPE",
-    )
     UNITY_CATALOG: Optional[str] = Field(
         default=None,
         env="UNITY_CATALOG",
@@ -37,10 +33,8 @@ class Settings(BaseSettings):
         default=None,
         env="DATABRICKS_CLIENT_SECRET",
     )
-    VECTOR_SEARCH_PREFIX: str
-    VECTOR_SEARCH_PREFIX = "pidgey"
-    VS_ENDPOINT_TYPE: str
-    VS_ENDPOINT_TYPE = "STANDARD"
+    LAKSBASE_PREFIX: str
+    LAKSBASE_PREFIX = "pidgey"
 
 
 load_dotenv()
