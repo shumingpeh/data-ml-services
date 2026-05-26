@@ -180,7 +180,9 @@ class _PonytaLakebaseStore:
             success returns a non exit functon value
 
         """
-        if self._check_lakebase_branch_exists(pg_project_name=pg_project_name):
+        if self._check_lakebase_branch_exists(
+            pg_project_name=pg_project_name, pg_branch_name=pg_branch_name
+        ):
             logger.info(f"creating lakebase branch: {pg_branch_name}")
 
             operation = self.lbc.postgres.create_branch(
