@@ -2,9 +2,9 @@ from typing import List
 
 from databricks.vector_search.client import VectorSearchClient
 from databricks.vector_search.reranker import DatabricksReranker
+from loguru import logger
 from sm_data_ml_utils.databricks_client.client import DatabricksSQLClient
 from sm_vector_store.pidgey.core import config
-from loguru import logger
 
 
 class _PidgeyRegistry:
@@ -101,10 +101,12 @@ class _PidgeyRegistry:
             score_threshold=score_threshold,
             num_results=num_results,
             disable_notice=True,
-            reranker=DatabricksReranker(columns_to_rerank=columns_rerank)
+            reranker=DatabricksReranker(columns_to_rerank=columns_rerank),
         )
 
-        return results.get("result", {}).get("data_array", [])
+        data_array = results.get("result", {}).get("data_array", [])
+
+        return [chunk for chunk in data_array if chunk[4] >= score_threshold]
 
     def _convert_source_table_format(
         self,
